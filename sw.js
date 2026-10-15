@@ -8,7 +8,7 @@
 // caches opportunistically as things are actually requested: the first
 // online visit after a deploy populates the cache, every visit after that
 // — online or off — serves instantly from it with a background refresh.
-const CACHE_NAME = 'reading-tracker-shell-v2';
+const CACHE_NAME = 'reading-tracker-shell-v3';
 // Everything is resolved against the worker's own scope, so this works both
 // when served from / (desktop shortcut) and from a sub-folder (phone site).
 const SCOPE = self.registration.scope;
@@ -54,9 +54,12 @@ self.addEventListener('fetch', (event) => {
   // the single scope-URL key — the server sends the same index.html for every
   // non-API route (client-side routing takes over from there), so one entry
   // covers all of them.
+  // GitHub Pages sends max-age=600 on every file, including index.html, so a plain
+  // fetch(request) can hand back a page up to 10 minutes old — a deployed update
+  // looked "not updated" on the phone. cache: 'no-store' always asks the network.
   if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(request)
+      fetch(request.url, { cache: 'no-store', credentials: 'same-origin' })
         .then((response) => {
           caches.open(CACHE_NAME).then((cache) => cache.put(SCOPE, response.clone()));
           return response;
