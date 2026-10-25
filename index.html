@@ -16,11 +16,17 @@
         try {
           var accent = localStorage.getItem('accentColor');
           if (accent) document.documentElement.setAttribute('data-accent', accent);
+          var theme = localStorage.getItem('theme');
+          if (theme === 'system') theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          if (theme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', '#1b1a17');
+          }
         } catch (e) {}
       })();
     </script>
-    <script type="module" crossorigin src="./index-DotxzZLk.js"></script>
-    <link rel="stylesheet" crossorigin href="./index-_4c6p9JV.css">
+    <script type="module" crossorigin src="./index-x31_W0Of.js"></script>
+    <link rel="stylesheet" crossorigin href="./index-DYxWuQ7N.css">
   </head>
   <body>
     <div id="root"></div>
